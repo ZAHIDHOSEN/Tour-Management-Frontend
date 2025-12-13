@@ -1,8 +1,12 @@
 import App from "@/App";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 
 import About from "@/pages/About";
+import Analytics from "@/pages/Admin/Analytics";
+
 import Login from "@/pages/Login";
 import RegisterPage from "@/pages/RegisterPage";
+import Bookings from "@/pages/User/Bookings";
 import Verify from "@/pages/Verify";
 
 
@@ -21,6 +25,34 @@ export const router = createBrowserRouter([
       }
      ]
   },
+  // admin
+  {
+    Component:DashboardLayout,
+    path:"/admin",
+    children:[
+      {
+        Component:Analytics,
+        path:"analytics"
+      }
+    ]
+  },
+  // user
+  {
+    Component:DashboardLayout,
+    path:"/user",
+    children:[
+      {
+        Component:Bookings,
+        path:"bookings"
+      }
+    ]
+  },
+
+  // others
+
+
+  
+
   {
     Component: Login,
     path:"/login"
