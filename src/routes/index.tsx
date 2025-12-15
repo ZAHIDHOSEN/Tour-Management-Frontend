@@ -1,18 +1,19 @@
 import App from "@/App";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-
 import About from "@/pages/About";
 import Login from "@/pages/Login";
 import RegisterPage from "@/pages/RegisterPage";
-import Bookings from "@/pages/User/Bookings";
 import Verify from "@/pages/Verify";
-import { generateRoute } from "@/utils/generateRoutes";
-
-
-
-
-import { createBrowserRouter } from "react-router";
+import { generateRoute } from "@/utils/generateRoutes";import { createBrowserRouter, Navigate } from "react-router";
 import { adminSidebarItems } from "./adminSidebarItems";
+import { userSidebarItems } from "./userSidebarItems";
+import { withAuth } from "@/utils/withAuth";
+import type { TRole } from "@/types";
+import { role } from "@/constant/role";
+
+import Unauthorized from "@/pages/Unauthorized";
+
+
 
 export const router = createBrowserRouter([
   {
@@ -20,28 +21,29 @@ export const router = createBrowserRouter([
      path: "/",
      children: [
       {
-        Component:About,
-        path:"/about"
+        Component:withAuth(About),
+        path:"about"
       }
      ]
   },
+
   // admin
   {
-    Component:DashboardLayout,
+    Component:withAuth(DashboardLayout,role.superAdmin as TRole),
     path:"/admin",
     children:[
+      {index:true, element:<Navigate to={`/admin/analytics`}></Navigate> },
       ... generateRoute(adminSidebarItems)
     ]
   },
+
   // user
   {
-    Component:DashboardLayout,
+    Component:withAuth(DashboardLayout,role.user as TRole),
     path:"/user",
     children:[
-      {
-        Component:Bookings,
-        path:"bookings"
-      }
+     {index:true, element:<Navigate to={`/user/bookings`}></Navigate> },
+      ...generateRoute(userSidebarItems)
     ]
   },
 
@@ -61,6 +63,10 @@ export const router = createBrowserRouter([
   {
     Component: Verify,
     path: "/verify"
+  },
+  {
+    Component: Unauthorized,
+    path: "/unAuthorized"
   }
 
 ]);

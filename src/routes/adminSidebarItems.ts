@@ -1,8 +1,10 @@
 import AddTour from "@/pages/Admin/AddTour";
 import AddTourType from "@/pages/Admin/AddTourType";
-import Analytics from "@/pages/Admin/Analytics";
 import type { ISidebarItem } from "@/types";
+import { lazy } from "react";
 
+//  sob load atkanor jonno
+const Analytics = lazy(()=>import("@/pages/Admin/Analytics"))
 
 
 
