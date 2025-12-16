@@ -16,17 +16,20 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 
+interface ITourType{
+    name:string
+}
 
 export function AddTourTypeModal() {
-   const form = useForm()
+   const form = useForm<ITourType>()
    const [addTourType] = useAddTourTypeMutation()
     
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const onsubmit = async(data:any) =>{
+    const onsubmit = async(data:ITourType) =>{
        const res = await addTourType({name:data.name}).unwrap();
        if(res.success){
         toast.success("Tour Type Add")
+        form.reset()
        }
 
     }
