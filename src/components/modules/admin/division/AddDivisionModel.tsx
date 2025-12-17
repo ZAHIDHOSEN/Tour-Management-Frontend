@@ -1,3 +1,4 @@
+import SingleImageUploader from "@/components/SingleImageUploader"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -11,26 +12,60 @@ import {
 } from "@/components/ui/dialog"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-
+import { Textarea } from "@/components/ui/textarea"
+import { useAddDivisionMutation } from "@/redux/features/division/division.api"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+
+
+
+
+interface IDivision {
+  name:string,
+  description:string
+}
 
 
 
 
 
 export function AddDivisionModel() {
-   const form = useForm()
+  const [image,setImage] = useState<File | null>(null)
+   
+   const[addDivision] = useAddDivisionMutation()
+   const [open,setOpen] = useState(false)
+   const form = useForm<IDivision>()
   
     
 
-    const onsubmit = async(data) =>{
-      console.log(data)
+    const onsubmit = async(data:IDivision) =>{
+     const formData = new FormData();
+
+     formData.append("data",JSON.stringify(data))
+     formData.append("file",image as File)
+
+    //  console.log(formData.get("data"))
+    //  console.log(formData.get("file"))
+
+    try {
+        await addDivision(formData).unwrap()
+         toast.success("Division Added")
+         setOpen(false)
+      
+    } catch (error) {
+      console.error(error)
+      
+    }
+
+ 
+     
     
     
 
     }
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <form>
         <DialogTrigger asChild>
           <Button>Add Division</Button>
@@ -50,7 +85,7 @@ export function AddDivisionModel() {
                             name="name"
                             render={({ field }) => (
                     <FormItem>
-                     <FormLabel>Tour Type</FormLabel>
+                     <FormLabel>Division</FormLabel>
                      <FormControl>
                       <Input placeholder="Division name" type="name" {...field} />
                       </FormControl>
@@ -64,12 +99,12 @@ export function AddDivisionModel() {
                    {/* description */}
                    <FormField
                     control={form.control}
-                            name="name"
+                            name="description"
                             render={({ field }) => (
                     <FormItem>
-                     <FormLabel>Division Description</FormLabel>
+                     <FormLabel className="my-2">Division Description</FormLabel>
                      <FormControl>
-                      <Input placeholder="Division Description" type="name" {...field} />
+                      <Textarea placeholder="Division Description" {...field} />
                       </FormControl>
                        <FormDescription className="sr-only">
                               This is division description
@@ -78,8 +113,10 @@ export function AddDivisionModel() {
                         </FormItem>
                             )}>
                    </FormField>
-            </form>
+              </form>
+               <SingleImageUploader onChange={setImage}></SingleImageUploader>
            </Form>
+           
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
@@ -87,7 +124,9 @@ export function AddDivisionModel() {
             <Button form="add-division" type="submit">Save changes</Button>
           </DialogFooter>
         </DialogContent>
+      
       </form>
+     
     </Dialog>
   )
 }
