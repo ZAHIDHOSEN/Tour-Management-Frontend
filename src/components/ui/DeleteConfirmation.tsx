@@ -18,9 +18,10 @@ interface IProps {
 }
 
 export function DeleteConfirmation({children,onConfirm}:IProps) {
-    onConfirm()
+    
     const handleConfirm = ()=>{
-        console.log("click")
+        onConfirm()
+        console.log("delete confirmation")
     }
   return (
     <AlertDialog>
