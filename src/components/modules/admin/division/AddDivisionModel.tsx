@@ -52,6 +52,8 @@ export function AddDivisionModel() {
         await addDivision(formData).unwrap()
          toast.success("Division Added")
          setOpen(false)
+         form.reset()
+         setImage(null)
       
     } catch (error) {
       console.error(error)
