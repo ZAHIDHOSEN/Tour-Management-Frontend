@@ -13,6 +13,9 @@ import { role } from "@/constant/role";
 
 import Unauthorized from "@/pages/Unauthorized";
 import Home from "@/pages/Home";
+import Tour from "@/pages/Tour";
+import TourDetails from "@/pages/TourDetails";
+import Booking from "@/pages/Booking";
 
 
 
@@ -28,7 +31,21 @@ export const router = createBrowserRouter([
       {
         Component:About,
         path:"about"
+      },
+      {
+        Component:Tour,
+        path:"tour"
+      },
+      {
+        Component:TourDetails,
+        path:"tour/:id"
+      },
+      {
+        Component:Booking,
+        path:"booking/:id"
       }
+
+
      ]
   },
 
