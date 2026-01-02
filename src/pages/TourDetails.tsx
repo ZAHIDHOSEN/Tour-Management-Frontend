@@ -7,7 +7,9 @@ import { format } from "date-fns";
 
 export default function TourDetails() {
   const { id } = useParams();
+  console.log(id)
   const { data, isLoading } = useGetAllTourQuery({ _id: id });
+  console.log(data)
 
   const { data: divisionData } = useGetAllDivisionQuery(
     {
