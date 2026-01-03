@@ -8,7 +8,6 @@ import { toast } from "sonner"
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -41,6 +40,13 @@ export default function AddTourType() {
     
  
    }
+   
+  //  total page 2 = [0,0]
+  //  console.log(Array.from({length:5},(_,index)=>index))
+   
+   
+   const totalPage = data?.meta?.totalPage || 1
+   console.log(totalPage)
   
   return (
     <div className="w-full max-w-7xl mx-auto px-5">
@@ -60,7 +66,7 @@ export default function AddTourType() {
     </TableHeader>
     <TableBody>
       {
-        data?.map((item:{_id:string,name:string})=> (
+        data?.data?.map((item:{_id:string,name:string})=> (
         <TableRow>
         <TableCell className="font-medium w-full">{item.name}</TableCell>
         <TableCell>
@@ -76,25 +82,41 @@ export default function AddTourType() {
   </TableBody>
     </Table>
     </div>
+
+
     {/* pagination */}
-    <div className="my-4">
+      {
+      totalPage >1 && ( <div className="my-4">
       <Pagination>
   <PaginationContent>
     <PaginationItem>
-      <PaginationPrevious onClick={()=> setCurrentPage((prev) =>prev -1)} />
+      <PaginationPrevious onClick={()=> setCurrentPage((prev) =>prev -1)} 
+      className={currentPage === 1 ? "pointer-events-none opacity-10": "cursor-pointer"}
+
+        />
     </PaginationItem>
+    {
+      Array.from({length:totalPage},(_,index)=>index+1).map(
+        (page) =>(  <PaginationItem key={page}
+                    onClick={()=>setCurrentPage(page)}>
+            <PaginationLink isActive={currentPage === page}>{page}</PaginationLink>
+           </PaginationItem>
+        )
+      )
+ 
+    }
+   
     <PaginationItem>
-      <PaginationLink href="#">1</PaginationLink>
+      <PaginationNext onClick={()=> setCurrentPage((prev) =>prev +1)}
+       className={currentPage === totalPage ? "pointer-events-none opacity-10": "cursor-pointer"}
+       />
     </PaginationItem>
-    <PaginationItem>
-      <PaginationEllipsis />
-    </PaginationItem>
-    <PaginationItem>
-      <PaginationNext onClick={()=> setCurrentPage((prev) =>prev +1)} />
-    </PaginationItem>
-  </PaginationContent>
-</Pagination>
+     </PaginationContent>
+   </Pagination>
     </div>
+
+      )
+     }
     </div>
   )
 }
